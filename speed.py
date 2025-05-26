@@ -139,8 +139,7 @@ def main():
     username = sys.argv[3]
     password = sys.argv[4]
     download_speed = int(parse_json_data(get_data(hostname, port, username, password)))
-    #more personal debugging stuff, only thing that matters is download_speed_mbps, it is the actual result this whole
-    #thing will return to HA
+    #more personal debugging stuff, only thing that matters is download_speed_mbps, it is the actual result in mbps
     #downloadSpeedInbytesps = str(download_speed)
     download_speed_mbps = str(int(download_speed/125000))
     print(download_speed_mbps)
