@@ -1,10 +1,16 @@
 #Author:snoorkwashanging
 #shoutout to the paramiko devs, some of this code did come from a demo, and of course I mostly use paramiko to do stuff
 #
-#thingy for getting a speedtest json from a local unifi controller, parsing it, and sending it to
+#script for getting internet speedtest json data from a ssh server, parsing it, and sending it to
 #a home assistant instance
-# this shit will only work with passwords for now, I will figure out keys later, but I don't care too much since it
+#this shit will only work with passwords for now, I will figure out keys later, but I don't care too much since it
 #runs on a local network and not over the internet
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#Some requirements:
+#some server with the Ookla speedtest-cli package (https://www.speedtest.net/apps/cli)
+#paramiko(just run pip install in this folder)
+#the host key for the server, as in you should've connected to the ssh server before
+#more will be added here, when I finish this stuff lol
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # How to use:
 # python speed.py hostname port username password
@@ -13,6 +19,7 @@
 # python speed.py 192.168.0.1 22 root passwordthatisntactuallymypassword
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #things I need to do still:
+#TODO: get the result to HA and have it do what I want it to do
 #TODO: add arg for whether the paramiko log should be turned on or not(bool)
 #TODO: set up that log so it will start with an if statement
 #TODO: figure out the ssh key stuff so you dont have to use a password
