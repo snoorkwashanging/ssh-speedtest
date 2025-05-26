@@ -35,9 +35,8 @@ password = sys.argv[4]
 
 
 def getData(hostname, port, username, password):
-    # tbh a lot of the getData class was copy and pasted from a demo, shout out to the paramiko team
+    #tbh a lot of the getData class was copy and pasted from a demo, shout out to the paramiko team
     #this is setting up socket stuff, I dont really understand it fully, but I am too lazy to go in depth and it works
-    global trans
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((hostname, port))
