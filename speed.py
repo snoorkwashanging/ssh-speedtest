@@ -1,10 +1,5 @@
 #Author:snoorkwashanging
 #shoutout to the paramiko devs, some of this code did come from a demo, and of course I mostly use paramiko to do stuff
-#
-#script for getting internet speedtest json data from a ssh server, parsing it, and sending it to
-#a home assistant instance
-#this shit will only work with passwords for now, I will figure out keys later, but I don't care too much since it
-#runs on a local network and not over the internet
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #Some requirements:
 #some server with the Ookla speedtest-cli package (https://www.speedtest.net/apps/cli)
@@ -14,9 +9,6 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # How to use:
 # python speed.py hostname port username password
-#
-# So for my system it would be:
-# python speed.py 192.168.0.1 22 root passwordthatisntactuallymypassword
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #things I need to do still:
 #TODO: get the result to HA and have it do what I want it to do
