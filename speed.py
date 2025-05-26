@@ -7,10 +7,10 @@
 #runs on a local network and not over the internet
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # How to use:
-# python main.py hostname port username password
+# python speed.py hostname port username password
 #
 # So for my system it would be:
-# python main.py 192.168.0.1 22 root passwordthatisntactuallymypassword
+# python speed.py 192.168.0.1 22 root passwordthatisntactuallymypassword
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #things I need to do still:
 #TODO: add arg for whether the paramiko log should be turned on or not(bool)
