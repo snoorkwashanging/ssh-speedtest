@@ -2,6 +2,21 @@
 #a home assistant instance
 # this shit will only work with passwords for now, I will figure out keys later, but I don't care too much since it
 #runs on a local network and not over the internet
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# How to use:
+# python main.py hostname port username password
+#
+# So for my system it would be:
+# python main.py 192.168.0.1 22 root passwordthatisntactuallymypassword
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#things I need to do still:
+#TODO: add arg for whether the paramiko log should be turned on or not(bool)
+#TODO: set up that log so it will start with an if statement
+#TODO: figure out the ssh key stuff so you dont have to use a password
+#TODO: probably figure out a safer way to do passwords if a password is used
+#TODO: Add the thing where paramiko will just add the host key
+#TODO: clean up this garbage more
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 import os
 import sys
 import traceback
@@ -14,9 +29,8 @@ hostname = sys.argv[1]
 port = int(sys.argv[2])
 username = sys.argv[3]
 password = sys.argv[4]
-#TODO: add arg for whether to log or not
 
-#TODO: add if statement for that arg lol
+#this is just for debugging
 #paramiko.util.log_to_file("log.log")
 
 
