@@ -14,27 +14,36 @@ hostname = sys.argv[1]
 port = int(sys.argv[2])
 username = sys.argv[3]
 password = sys.argv[4]
+#TODO: add arg for whether to log or not
 
+#TODO: add if statement for that arg lol
 #paramiko.util.log_to_file("log.log")
-#tbh a lot of the getData class was copy and pasted from a demo, shout out to the paramiko team
+
 
 def getData(hostname, port, username, password):
+    # tbh a lot of the getData class was copy and pasted from a demo, shout out to the paramiko team
+    #this is setting up socket stuff, I dont really understand it fully, but I am too lazy to go in depth and it works
+    global trans
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((hostname, port))
     except Exception as e:
-        print("*** Im crying, it failed: " + str(e))
+        print("*** Im crying, it failed(there was an exception): " + str(e))
         traceback.print_exc()
         sys.exit(1)
 
+    #try connecting and doing the speedtest command
     try:
+        #instantiates the transport
         trans = paramiko.Transport(sock)
+        #starts the transport client, throws exception if it fails
         try:
             trans.start_client()
         except paramiko.SSHException:
             print("*** SSH negotiation failed.")
             sys.exit(1)
 
+        #all of this is literally to just get the host keys
         try:
             keys = paramiko.util.load_host_keys(os.path.expanduser("~/.ssh/known_hosts"))
         except IOError:
@@ -54,10 +63,13 @@ def getData(hostname, port, username, password):
         elif keys[hostname][key.get_name()] != key:
             print("*** WARNING: Host key has changed!!!")
             sys.exit(1)
-        else:
-            print("*** Host key OK.")
+        #else:
+            #for personal use, ignore unless you wanna use it.
+            #print("*** Host key OK.")
 
 
+        #checks if it is logged in, if not it will log in. if the username or password is wrong, it will print the
+        #authentication failed message and kill the script
         if not trans.is_authenticated():
             trans.auth_password(username, password)
         if not trans.is_authenticated():
@@ -65,20 +77,27 @@ def getData(hostname, port, username, password):
             trans.close()
             sys.exit(1)
 
-        if trans.is_authenticated():
-            print("*** Authentication successful.")
-        else:
-            print("*** Authentication failed.")
+        # getting left for personal use
+        # if trans.is_authenticated():
+        #
+        #     print("*** Authentication successful.")
+        # else:
+        #     print("*** Authentication failed.")
 
+        #opens the session
         channel = trans.open_session()
-        channel.set_combine_stderr(True)
-        print("executing command")
+
+        #I am leaving this print for personal use
+        #print("executing command")
 
         try:
-            channel.exec_command("speedtest-cli --json")
-            #receive the output
-            json_output_bytes = channel.recv(1024)
+            channel.exec_command("speedtest -f json -P 0")
+            #receives the output, it was set to 1024 bytes initially, but the json parser got upset because it would cut off
+            #before the closing curly bracket
+            json_output_bytes = channel.recv(2048)
+            #decodes all the data and returns it.
             return json_output_bytes.decode('utf-8')
+        #exceptions!!!
         except Exception as e:
             print("*** Failed to execute command: " + str(e))
             traceback.print_exc()
@@ -86,9 +105,9 @@ def getData(hostname, port, username, password):
             trans.close()
             sys.exit(1)
 
-        channel.close()
-        trans.close()
+        #trans.close()
 
+    #this is the exception for all of that code in the giant try block
     except Exception as e:
         print("*** Caught exception: " + str(e.__class__) + ": " + str(e))
         traceback.print_exc()
@@ -98,14 +117,18 @@ def getData(hostname, port, username, password):
             pass
         sys.exit(1)
 
+#parses the json data, I probably should just put this in the main() function, but eh. It helps me keep track of things
 def parsejsondownload(json_data):
-    print(json_data)
-    parse = json.loads(json_data)
-    return parse['download']
+    #print(json_data)
+    data = json.loads(json_data)
+    return data['download']['bandwidth']
 
 def main():
-    downloadsp = (parsejsondownload(getData(hostname, port, username, password)))
-    print("Download speed: " + str(downloadsp)/12500 + " Mbit/s")
+    downloadsp = int(parsejsondownload(getData(hostname, port, username, password)))
+    #more personal debugging stuff, only thing that matters is downloadspeedinmbps, it is the actual result this whole
+    #thing will return to HA
+    #downloadSpeedInbytesps = str(downloadsp)
+    downloadspeedinmbps = str(int(downloadsp/125000))
 
 
 if __name__ == "__main__":
