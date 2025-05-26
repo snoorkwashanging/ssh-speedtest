@@ -28,7 +28,7 @@ import json
 #this is just for debugging
 #paramiko.util.log_to_file("log.log")
 
-def getData(hostname, port, username, password):
+def get_data(hostname, port, username, password):
     #tbh a lot of the getData class was copy and pasted from a demo, shout out to the paramiko team
     #this is setting up socket stuff, I dont really understand it fully, but I am too lazy to go in depth and it works
     try:
@@ -42,10 +42,10 @@ def getData(hostname, port, username, password):
     #try connecting and doing the speedtest command
     try:
         #instantiates the transport
-        trans = paramiko.Transport(sock)
+        transport = paramiko.Transport(sock)
         #starts the transport client, throws exception if it fails
         try:
-            trans.start_client()
+            transport.start_client()
         except paramiko.SSHException:
             print("*** SSH negotiation failed.")
             sys.exit(1)
@@ -62,7 +62,7 @@ def getData(hostname, port, username, password):
                 print("*** Unable to open host keys file")
                 keys = {}
 
-        key = trans.get_remote_server_key()
+        key = transport.get_remote_server_key()
         if hostname not in keys:
             print("*** WARNING: Unknown host key!")
         elif key.get_name() not in keys[hostname]:
@@ -77,22 +77,22 @@ def getData(hostname, port, username, password):
 
         #checks if it is logged in, if not it will log in. if the username or password is wrong, it will print the
         #authentication failed message and kill the script
-        if not trans.is_authenticated():
-            trans.auth_password(username, password)
-        if not trans.is_authenticated():
+        if not transport.is_authenticated():
+            transport.auth_password(username, password)
+        if not transport.is_authenticated():
             print("*** Authentication failed. :(")
-            trans.close()
+            transport.close()
             sys.exit(1)
 
         # getting left for personal use
-        # if trans.is_authenticated():
+        # if transport.is_authenticated():
         #
         #     print("*** Authentication successful.")
         # else:
         #     print("*** Authentication failed.")
 
         #opens the session
-        channel = trans.open_session()
+        channel = transport.open_session()
 
         #I am leaving this print for personal use
         #print("executing command")
@@ -109,23 +109,23 @@ def getData(hostname, port, username, password):
             print("*** Failed to execute command: " + str(e))
             traceback.print_exc()
             channel.close()
-            trans.close()
+            transport.close()
             sys.exit(1)
 
-        #trans.close()
+        #transport.close()
 
     #this is the exception for all of that code in the giant try block
     except Exception as e:
         print("*** Caught exception: " + str(e.__class__) + ": " + str(e))
         traceback.print_exc()
         try:
-            trans.close()
+            transport.close()
         except:
             pass
         sys.exit(1)
 
 #parses the json data, I probably should just put this in the main() function, but eh. It helps me keep track of things
-def parsejsondownload(json_data):
+def parse_json_data(json_data):
     #print(json_data)
     data = json.loads(json_data)
     return data['download']['bandwidth']
@@ -135,11 +135,11 @@ def main():
     port = int(sys.argv[2])
     username = sys.argv[3]
     password = sys.argv[4]
-    downloadsp = int(parsejsondownload(getData(hostname, port, username, password)))
-    #more personal debugging stuff, only thing that matters is downloadspeedinmbps, it is the actual result this whole
+    download_speed = int(parse_json_data(get_data(hostname, port, username, password)))
+    #more personal debugging stuff, only thing that matters is download_speed_mbps, it is the actual result this whole
     #thing will return to HA
-    #downloadSpeedInbytesps = str(downloadsp)
-    downloadspeedinmbps = str(int(downloadsp/125000))
+    #downloadSpeedInbytesps = str(download_speed)
+    download_speed_mbps = str(int(download_speed/125000))
 
 
 if __name__ == "__main__":
