@@ -49,10 +49,11 @@ def get_data(hostname, port, username, password):
         traceback.print_exc()
         sys.exit(1)
 
+    #instantiates the transport
+    transport = paramiko.Transport(sock)
+
     #try connecting and doing the speedtest command
     try:
-        #instantiates the transport
-        transport = paramiko.Transport(sock)
         #starts the transport client, throws exception if it fails
         try:
             transport.start_client()
@@ -150,6 +151,7 @@ def main():
     #thing will return to HA
     #downloadSpeedInbytesps = str(download_speed)
     download_speed_mbps = str(int(download_speed/125000))
+    print(download_speed_mbps)
 
 
 if __name__ == "__main__":
