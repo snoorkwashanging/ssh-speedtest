@@ -1,3 +1,6 @@
+#Author:snoorkwashanging
+#shoutout to the paramiko devs, some of this code did come from a demo, and of course I mostly use paramiko to do stuff
+#
 #thingy for getting a speedtest json from a local unifi controller, parsing it, and sending it to
 #a home assistant instance
 # this shit will only work with passwords for now, I will figure out keys later, but I don't care too much since it
@@ -29,7 +32,7 @@ import json
 #paramiko.util.log_to_file("log.log")
 
 def get_data(hostname, port, username, password):
-    #tbh a lot of the getData class was copy and pasted from a demo, shout out to the paramiko team
+    #tbh a lot of the get_data class was copy and pasted from a demo, shout out to the paramiko team
     #this is setting up socket stuff, I dont really understand it fully, but I am too lazy to go in depth and it works
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
