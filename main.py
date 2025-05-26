@@ -24,15 +24,9 @@ import paramiko.util
 import socket
 import json
 
-#some global shit
-hostname = sys.argv[1]
-port = int(sys.argv[2])
-username = sys.argv[3]
-password = sys.argv[4]
 
 #this is just for debugging
 #paramiko.util.log_to_file("log.log")
-
 
 def getData(hostname, port, username, password):
     #tbh a lot of the getData class was copy and pasted from a demo, shout out to the paramiko team
@@ -137,6 +131,10 @@ def parsejsondownload(json_data):
     return data['download']['bandwidth']
 
 def main():
+    hostname = sys.argv[1]
+    port = int(sys.argv[2])
+    username = sys.argv[3]
+    password = sys.argv[4]
     downloadsp = int(parsejsondownload(getData(hostname, port, username, password)))
     #more personal debugging stuff, only thing that matters is downloadspeedinmbps, it is the actual result this whole
     #thing will return to HA
