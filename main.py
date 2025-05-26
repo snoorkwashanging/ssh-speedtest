@@ -15,8 +15,8 @@ port = int(sys.argv[2])
 username = sys.argv[3]
 password = sys.argv[4]
 
-paramiko.util.log_to_file("log.log")
-##tbh a lot of this was copy and pasted from a demo
+#paramiko.util.log_to_file("log.log")
+#tbh a lot of the getData class was copy and pasted from a demo, shout out to the paramiko team
 
 def getData(hostname, port, username, password):
     try:
@@ -72,19 +72,13 @@ def getData(hostname, port, username, password):
 
         channel = trans.open_session()
         channel.set_combine_stderr(True)
-        print("poggers")
         print("executing command")
 
         try:
             channel.exec_command("speedtest-cli --json")
             #receive the output
             json_output_bytes = channel.recv(1024)
-            print(type(json_output_bytes))
-            json_output = json_output_bytes.decode('utf-8')
-            print(type(json_output))
-            print("JSON Output: " + json_output)
-            print("IT WORKED!!!!")
-
+            return json_output_bytes.decode('utf-8')
         except Exception as e:
             print("*** Failed to execute command: " + str(e))
             traceback.print_exc()
@@ -103,3 +97,16 @@ def getData(hostname, port, username, password):
         except:
             pass
         sys.exit(1)
+
+def parsejsondownload(json_data):
+    print(json_data)
+    parse = json.loads(json_data)
+    return parse['download']
+
+def main():
+    downloadsp = (parsejsondownload(getData(hostname, port, username, password)))
+    print("Download speed: " + str(downloadsp)/12500 + " Mbit/s")
+
+
+if __name__ == "__main__":
+    main()
