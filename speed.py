@@ -32,7 +32,7 @@ import json
 
 def get_data(hostname, port, username, password):
     #tbh a lot of the get_data class was copy and pasted from a demo, shout out to the paramiko team
-    #this is setting up socket stuff, I dont really understand it fully, but I am too lazy to go in depth and it works
+    #this is setting up socket stuff, I don't really understand it fully, but I am too lazy to go in depth and it works
     try:
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         sock.connect((hostname, port))
@@ -74,7 +74,7 @@ def get_data(hostname, port, username, password):
             print("*** WARNING: Host key has changed!!!")
             sys.exit(1)
         #else:
-            #for personal use, ignore unless you wanna use it.
+            #for personal use, ignore unless you want to use it.
             #print("*** Host key OK.")
 
 
